@@ -1,0 +1,13 @@
+# Environnement
+env
+__pycache__
+
+# Dossier bases de données MySQL et MongoDB
+db
+mongo-db
+
+# Sets de données
+imdb*
+
+# Rapport BDA
+rapport

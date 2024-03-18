@@ -1,0 +1,32 @@
+# MongoDB
+
+## Introduction
+
+### Start Mongo Server
+
+    mongod --dbpath ./mongo-db/
+
+### Start Mongo CLI
+
+    mongosh mongodb://127.0.0.1:27017
+
+## Create Database
+
+    use imdb
+
+## Create Collections (Tables)
+
+    db.createCollection("movies")
+    db.createCollection("episodes")
+    db.createCollection("persons")
+    db.createCollection("characters")
+    db.createCollection("directors")
+    db.createCollection("genres")
+    db.createCollection("knownformovies")
+    db.createCollection("principals")
+    db.createCollection("professions")
+    db.createCollection("ratings")
+    db.createCollection("titles")
+    db.createCollection("writers")
+    
+    show collections
