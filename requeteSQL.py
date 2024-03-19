@@ -42,24 +42,23 @@ def requete3(con):
 def requete4(con): 
     cur = con.cursor()
     res = cur.execute('''
-                    SELECT actor_name, movie_title, role_count
-                    FROM (
-                        SELECT p.primaryName AS actor_name, m.primaryTitle AS movie_title, COUNT(*) AS role_count 
-                        FROM persons p 
-                        JOIN characters c ON p.pid = c.pid 
-                        JOIN movies m ON c.mid = m.mid 
-                        GROUP BY c.pid, c.mid 
-                    ) AS roles_per_actor_movie
-                    WHERE role_count = (
-                        SELECT MAX(role_count) 
+                    WITH max_roles_per_person_movie AS (
+                      SELECT MAX(role_count) as max_roles
                         FROM (
                             SELECT COUNT(*) AS role_count 
                             FROM persons p 
                             JOIN characters c ON p.pid = c.pid 
                             JOIN movies m ON c.mid = m.mid 
                             GROUP BY c.pid, c.mid 
-                        ) AS max_roles
+                        )
                     )
+                      
+                    SELECT p.primaryName, m.primaryTitle, COUNT(*) AS role_count 
+                    FROM persons p, max_roles_per_person_movie
+                    JOIN characters c ON p.pid = c.pid 
+                    JOIN movies m ON c.mid = m.mid 
+                    GROUP BY c.pid, c.mid 
+                    HAVING role_count = max_roles
                     ORDER BY role_count DESC;
                     ''')
     return res

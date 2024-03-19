@@ -90,26 +90,38 @@ def requete4(db):
     characters_collection = db['characters']
     movies_collection = db['movies']
 
-    roles_per_actor_per_movie = {}
+    # Initialiser un dictionnaire pour stocker le nombre de rôles par acteur par film
+    roles_per_person_per_movie = {}
 
     # Récupérer tous les personnages
-    characters = characters_collection.count_documents()
+    characters = characters_collection.find()
 
     # Parcourir tous les personnages et compter le nombre de rôles par acteur par film
     for character in characters:
         movie_id = character["mid"]
-        actor_id = character["pid"]
-        if (actor_id, movie_id) in roles_per_actor_per_movie:
-            roles_per_actor_per_movie[(actor_id, movie_id)].add(character["name"])
+        person_id = character["pid"]
+        # Vérifier si la combinaison personne-film existe déjà dans le dictionnaire
+        if (person_id, movie_id) in roles_per_person_per_movie:
+            # Si oui, ajouter le rôle à l'ensemble des rôles existants
+            roles_per_person_per_movie[(person_id, movie_id)].add(character["name"])
         else:
-            roles_per_actor_per_movie[(actor_id, movie_id)] = {character["name"]}
+            # Si non, initialiser un nouvel ensemble de rôles pour cette personne et ce film
+            roles_per_person_per_movie[(person_id, movie_id)] = {character["name"]}
 
     # Identifier l'acteur avec le plus grand nombre de rôles différents dans un même film
     max_roles_count = 0
-    for actor_movie, roles in roles_per_actor_per_movie.items():
+    for person_movie, roles in roles_per_person_per_movie.items():
         roles_count = len(roles)
+        # Trouver le nombre maximal de rôles
         if roles_count > max_roles_count:
             max_roles_count = roles_count
-    
-    print(characters)
 
+    # Parcourir à nouveau le dictionnaire pour trouver les acteurs avec le nombre maximal de rôles
+    for person_movie, roles in roles_per_person_per_movie.items():
+        # Si le nombre de rôles est égal au nombre maximal trouvé
+        if len(roles) == max_roles_count:
+            # Récupérer le nom de l'acteur et le titre du film correspondant
+            person_name = persons_collection.find_one({"pid": person_movie[0]})["primaryName"]
+            movie_name = movies_collection.find_one({"mid": person_movie[1]})["primaryTitle"]
+            # Afficher le résultat
+            print(person_name + " - " + movie_name + " - " + str(len(roles)))
