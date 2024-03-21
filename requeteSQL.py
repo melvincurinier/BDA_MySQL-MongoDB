@@ -49,10 +49,9 @@ def requete4(con):
                             FROM persons p 
                             JOIN characters c ON p.pid = c.pid 
                             JOIN movies m ON c.mid = m.mid 
-                            GROUP BY c.pid, c.mid 
+                            GROUP BY c.pid, c.mid
                         )
                     )
-                      
                     SELECT p.primaryName, m.primaryTitle, COUNT(*) AS role_count 
                     FROM persons p, max_roles_per_person_movie
                     JOIN characters c ON p.pid = c.pid 

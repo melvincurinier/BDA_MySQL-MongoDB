@@ -11,13 +11,15 @@ if __name__ == "__main__":
     # db.createDatabase("imdb.db", "imdb-small", True)
 
     # MySQL
-    # con = sqlite3.connect("./db/imdb.db")
-    # start_time = time.time()
-    # res = rsql.requete4(con)
-    # for row in res :
-    #     print(row)
-    # end_time = time.time()
-    # con.close()
+    #con = sqlite3.connect("./db/imdb.db")
+    #start_time = time.time()
+    #res = rsql.requete5(con)
+    #count = 0
+    #for row in res :
+    #    count += 1
+    #print(count)
+    #end_time = time.time()
+    #con.close()
     
     # MongoDB
     # dbsT.insert_data_mongoDB('./db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small')
@@ -25,9 +27,8 @@ if __name__ == "__main__":
     client = pymongo.MongoClient("mongodb://localhost:27017/")
     collections = client["imdb"]
     start_time = time.time()
-    rmdb.requete4(collections)
+    rmdb.requete5(collections)
     end_time = time.time()
-
     client.close()
     
     print("Temps pour récupérer les informations :", end_time - start_time, "secondes")

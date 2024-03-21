@@ -125,3 +125,48 @@ def requete4(db):
             movie_name = movies_collection.find_one({"mid": person_movie[1]})["primaryTitle"]
             # Afficher le résultat
             print(person_name + " - " + movie_name + " - " + str(len(roles)))
+
+def requete5(db):
+    movies_collection = db["movies"]
+    ratings_collection = db["ratings"]
+    knownformovies_collection = db["knownformovies"]
+    persons_collection = db["persons"]
+
+    # Récupérer l'année de sortie du film "Avatar"
+    avatar_year = movies_collection.find_one({"primaryTitle": "Avatar"})["startYear"]
+
+    # Récupérer les films sortis après "Avatar"
+    result_avatar_year = movies_collection.find({"startYear": {"$gte": avatar_year}}, {"mid": 1})
+
+    # Récupérer les films avec plus de 200000 votes
+    result_high_votes = ratings_collection.find({"numVotes": {"$gt": 200000}}, {"mid": 1})
+
+    # Obtenir les identifiants des films ayant à la fois un nombre de votes élevé et sortis après "Avatar"
+    films_avatar_year = {doc["mid"] for doc in result_avatar_year}
+    films_high_votes = {doc["mid"] for doc in result_high_votes}
+    hit_movies_after_avatar = films_avatar_year.intersection(films_high_votes)
+
+    # Obtenir les identifiants des films ayant un nombre de votes faible et sortis avant "Avatar"
+    movies_id = [movie for movie in hit_movies_after_avatar]
+    result_low_votes = ratings_collection.find({'mid': {'$nin': movies_id }, "numVotes": {"$lt": 200000}}, {"mid": 1})
+
+    # Obtenir les identifiants des films connus associés à ces films
+    low_ratings_movies_id = [movie["mid"] for movie in result_low_votes]
+    movies = movies_collection.find({'mid': {'$in': low_ratings_movies_id }, "startYear": {"$lt": avatar_year}}, {"mid": 1})
+
+    knownformovies_movies = [movie["mid"] for movie in movies]
+    knownformovie_persons = knownformovies_collection.find({'mid': {'$in': knownformovies_movies}}, {"pid": 1})
+
+    # Obtenir les identifiants des personnes associées à ces films connus
+    persons_id = [person["pid"] for person in knownformovie_persons]
+    persons_name = persons_collection.find({'pid': {'$in':  persons_id}}, {"primaryName": 1})
+    persons = persons_name.distinct("primaryName")
+
+    # Afficher les noms des personnes associées
+    for row in persons:
+        print(row)
+
+
+
+
+    
