@@ -22,10 +22,12 @@ def export_sqliteTable_to_mongoCollection(sqlite_path, mongo_url, sqlite_table, 
 
     sqlite_conn.close()
     mongo_client.close()
+    print(sqlite_table + " done !")
 
-def insert_data_mongoDB(uri_db, uri_mongodb, mongodbname): # './db/imdb.db', 'mongodb://localhost:27017/', 'imdb'
+def insert_data_mongoDB(uri_db, uri_mongodb, mongodbname, type): # './db/imdb.db', 'mongodb://localhost:27017/', 'imdb'
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'movies', mongodbname, 'movies')
-    export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'episodes', mongodbname, 'episodes')
+    if(type == "full" or type == "medium"):
+        export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'episodes', mongodbname, 'episodes')
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'persons', mongodbname, 'persons')
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'characters', mongodbname, 'characters')
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'directors', mongodbname, 'directors')
@@ -36,3 +38,4 @@ def insert_data_mongoDB(uri_db, uri_mongodb, mongodbname): # './db/imdb.db', 'mo
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'ratings', mongodbname, 'ratings')
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'titles', mongodbname, 'titles')
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'writers', mongodbname, 'writers')
+

@@ -35,7 +35,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT MOVIES
-    with open(dataset + "/movies.csv", "r") as file:
+    with open(dataset + "/movies.csv", "r", encoding="utf-8") as file:
         content = csv.reader(file, delimiter=',')
         next(content)
         cur.executemany("INSERT INTO movies VALUES (?, ?, ?, ?, ?, ?, ?, ?)", content)
@@ -57,7 +57,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
         )
 
         # INSERT EPISODES
-        with open(dataset + "/episodes.csv", "r") as file:
+        with open(dataset + "/episodes.csv", "r", encoding="utf-8") as file:
             content = csv.reader(file, delimiter=',')
             next(content)
             cur.executemany("INSERT INTO episodes VALUES (?, ?, ?, ?)", content)
@@ -75,7 +75,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT PERSONS
-    file = open(dataset + "/persons.csv", "r")
+    file = open(dataset + "/persons.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO persons VALUES(?, ?, ?, ?)", content)
@@ -95,7 +95,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT CHARACTERS
-    file = open(dataset + "/characters.csv", "r")
+    file = open(dataset + "/characters.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO characters VALUES(?, ?, ?)", content)
@@ -115,7 +115,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT DIRECTORS
-    file = open(dataset + "/directors.csv", "r")
+    file = open(dataset + "/directors.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO directors VALUES(?, ?)", content)
@@ -134,7 +134,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT GENRES
-    file = open(dataset + "/genres.csv", "r")
+    file = open(dataset + "/genres.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO genres VALUES(?, ?)", content)
@@ -153,7 +153,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT KNOWNFORMOVIES
-    file = open(dataset + "/knownformovies.csv", "r")
+    file = open(dataset + "/knownformovies.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO knownformovies VALUES(?, ?)", content)
@@ -176,7 +176,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT PRINCIPALS
-    file = open(dataset + "/principals.csv", "r")
+    file = open(dataset + "/principals.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO principals VALUES(?, ?, ?, ?, ?)", content)
@@ -195,7 +195,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT PROFESSIONS
-    file = open(dataset + "/professions.csv", "r")
+    file = open(dataset + "/professions.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO professions VALUES(?, ?)", content)
@@ -215,7 +215,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT RATINGS
-    file = open(dataset + "/ratings.csv", "r")
+    file = open(dataset + "/ratings.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO ratings VALUES(?, ?, ?)", content)
@@ -240,7 +240,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT TITLES
-    file = open(dataset + "/titles.csv", "r")
+    file = open(dataset + "/titles.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO titles VALUES(?, ?, ?, ?, ?, ?, ?, ?)", content)
@@ -260,7 +260,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
     )
 
     # INSERT WRITERS
-    file = open(dataset + "/writers.csv", "r")
+    file = open(dataset + "/writers.csv", "r", encoding="utf-8")
     content = csv.reader(file, delimiter =',')
     next(content)
     cur.executemany("INSERT INTO writers VALUES(?, ?)", content)
