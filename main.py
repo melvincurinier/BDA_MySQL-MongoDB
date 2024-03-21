@@ -26,12 +26,13 @@ if __name__ == "__main__":
    # dbsT.insert_data_mongoDB('./db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small')
    client = pymongo.MongoClient("mongodb://localhost:27017/")
    collections = client["imdb"]
-   # start_time = time.time()
+   start_time = time.time()
+   dbs.test_film_collection("The Kid")
    # rmdb.requete3(collections)
-   # end_time = time.time()
+   end_time = time.time()
 
-   # client.close()
+   client.close()
    
-   # tart_time = time.time()
-   # print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
+   tart_time = time.time()
+   print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
 
