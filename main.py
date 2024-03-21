@@ -14,10 +14,8 @@ if __name__ == "__main__":
     #con = sqlite3.connect("./db/imdb.db")
     #start_time = time.time()
     #res = rsql.requete5(con)
-    #count = 0
     #for row in res :
-    #    count += 1
-    #print(count)
+    #    print(row)
     #end_time = time.time()
     #con.close()
     
