@@ -11,7 +11,7 @@ import dbStructure as dbs
 
 if __name__ == "__main__":
    #  # Création de la base de données
-   #  db.createDatabase("imdb.db", "imdb-tiny", True)
+   #db.createDatabase("imdb.db", "imdb-tiny", True)
 
    #  # MySQL
    #  con = sqlite3.connect("./db/imdb.db")
@@ -23,15 +23,17 @@ if __name__ == "__main__":
    #  con.close()
     
     # MongoDB
-   # dbsT.insert_data_mongoDB('./db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small')
-   client = pymongo.MongoClient("mongodb://localhost:27017/")
-   collections = client["imdb"]
+   #dbsT.insert_data_mongoDB('./db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small')
+   #client = pymongo.MongoClient("mongodb://localhost:27017/")
+   #collections = client["imdb"]
    # start_time = time.time()
    # rmdb.requete3(collections)
    # end_time = time.time()
 
    # client.close()
    
-   # tart_time = time.time()
-   # print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
+   start_time = time.time()
+   dbs.mongodbMovieStructure()
+   end_time = time.time()
+   print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
 
