@@ -8,13 +8,10 @@ def mongodbMovieStructure():
     # Récupérer les données de différentes collections
     movies_collection = db['movies']
     episodes_collection = db['episodes']
-    persons_collection = db['persons']
-    characters_collection = db['characters']
     directors_collection = db['directors']
     genres_collection = db['genres']
     knownformovies_collection = db['knownformovies']
     principals_collection = db['principals']
-    professions_collection = db['professions']
     ratings_collection = db['ratings']
     titles_collection = db['titles']
     writers_collection = db['writers']
