@@ -65,17 +65,14 @@ def createFilmCollection():
         # Exclure l'identifiant _id lors de la sérialisation JSON
         json.dump(all_films, json_file, indent=4, default=str)
         print("Données écrites dans le fichier JSON.")
-
-    print("Nouvelle collection 'film_collection' créée avec succès et données écrites dans le fichier JSON.")
-
-# Fonction pour tester la collection de films
-def test_film_collection(movie_title):
-    # Recherche du film par son titre dans la collection
-    movie_info = db['film_collection'].find_one({'primaryTitle': movie_title})
-    
-    if movie_info:
-        # Affichage des informations sur le film
-        print(movie_info)
         
-    else:
-        print("Film non trouvé.")
+def afficher_tous_les_films():
+    # Récupérer tous les films de la collection
+    tous_les_films = film_collection.find()
+
+    # Affichage des résultats
+    for film in tous_les_films:
+        print(film["primaryTitle"])
+
+# createFilmCollection()
+# test_film_collection("The Kid")

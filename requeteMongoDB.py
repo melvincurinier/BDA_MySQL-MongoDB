@@ -1,3 +1,17 @@
+#  une fonction qui affiche tout les films
+def afficher_tous_les_films(db):
+    # Accès aux collections MongoDB
+    movies_collection = db['movies']
+
+    # Récupérer les films
+    movies = movies_collection.find()
+
+    # Parcourir les films et afficher les informations
+    for movie in movies:
+        # Afficher les informations du film
+        print("Titre principal:", movie['primaryTitle'])
+    
+
 
 def requete1(db):
     # Accès aux collections MongoDB
