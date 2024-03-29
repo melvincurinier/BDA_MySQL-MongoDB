@@ -1,5 +1,4 @@
 import json
-from bson import ObjectId  # Ajout de la bibliothèque bson pour gérer les ObjectId
 from pymongo import MongoClient
 
 # Connexion à la base de données MongoDB
