@@ -40,7 +40,7 @@ def createDatabase(dbname, dataset, isWithIndexes):
         next(content)
         cur.executemany("INSERT INTO movies VALUES (?, ?, ?, ?, ?, ?, ?, ?)", content)
 
-    if(dataset == "medium" or dataset == "full"):
+    if(dataset == "imdb-medium" or dataset == "imdb-full"):
         cur.execute("DROP TABLE IF EXISTS episodes")
 
         # CREATE TABLE EPISODES
