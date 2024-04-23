@@ -11,15 +11,15 @@ import sqlite_trigger_handler as sth
 
 
 if __name__ == "__main__":
-   # # Création de la base de données
-   # db.createDatabase("imdb.db", "imdb-tiny", True)
+   #  # Création de la base de données
+   #db.createDatabase("imdb.db", "imdb-medium", True)
 
-   # # MySQL
+   #  # MySQL
    # con = sqlite3.connect("./db/imdb.db")
    # start_time = time.time()
    # res = rsql.requete4(con)
    # for row in res :
-   #    print(row)
+   #   print(row)
    # end_time = time.time()
    # con.close()
     

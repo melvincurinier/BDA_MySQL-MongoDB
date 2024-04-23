@@ -24,7 +24,7 @@ def export_sqliteTable_to_mongoCollection(sqlite_path, mongo_url, sqlite_table, 
     mongo_client.close()
     print(sqlite_table + " done !")
 
-def insert_data_mongoDB(uri_db, uri_mongodb, mongodbname, type): # './db/imdb.db', 'mongodb://localhost:27017/', 'imdb'
+def insert_data_mongoDB(uri_db, uri_mongodb, mongodbname, type): # './db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small'
     export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'movies', mongodbname, 'movies')
     if(type == "full" or type == "medium"):
         export_sqliteTable_to_mongoCollection(uri_db, uri_mongodb, 'episodes', mongodbname, 'episodes')
