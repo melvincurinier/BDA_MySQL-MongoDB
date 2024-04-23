@@ -1,9 +1,11 @@
 import json
 from pymongo import MongoClient
 
-# Connexion à la base de données MongoDB
-client = MongoClient('localhost', 27017)
-db = client['imdb']
+def mongodbStructure():
+
+    # Connexion à la base de données MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client['imdb']
 
     # Récupérer les données de différentes collections
     movies_collection = db['movies']

@@ -12,7 +12,7 @@ import sqlite_trigger_handler as sth
 
 if __name__ == "__main__":
    #  # Création de la base de données
-   #db.createDatabase("imdb.db", "imdb-medium", True)
+   # db.createDatabase("imdb.db", "imdb-medium", True)
 
    #  # MySQL
    # con = sqlite3.connect("./db/imdb.db")
