@@ -1,19 +1,6 @@
-#  une fonction qui affiche tout les films
-def afficher_tous_les_films(db):
-    # Accès aux collections MongoDB
-    movies_collection = db['movies']
+from pymongo.database import Database
 
-    # Récupérer les films
-    movies = movies_collection.find()
-
-    # Parcourir les films et afficher les informations
-    for movie in movies:
-        # Afficher les informations du film
-        print("Titre principal:", movie['primaryTitle'])
-    
-
-
-def requete1(db):
+def requete1(db : Database):
     # Accès aux collections MongoDB
     persons_collection = db['persons']
     characters_collection = db['characters']
@@ -41,7 +28,7 @@ def requete1(db):
     for movie in movies_result:
         print(movie["primaryTitle"])
 
-def requete2(db):
+def requete2(db : Database):
     # Accès aux collections MongoDB
     genres_collection = db['genres']
     ratings_collection = db['ratings']
@@ -74,7 +61,7 @@ def requete2(db):
     for movie in movies_result:
         print(movie["primaryTitle"])
 
-def requete3(db):
+def requete3(db : Database):
     persons_collection = db['persons']
     writers_collection = db['writers']
     titles_collection = db['titles']
@@ -99,7 +86,7 @@ def requete3(db):
         print(doc['primaryName'])
 
 
-def requete4(db):
+def requete4(db : Database):
     persons_collection = db['persons']
     characters_collection = db['characters']
     movies_collection = db['movies']
@@ -140,7 +127,7 @@ def requete4(db):
             # Afficher le résultat
             print(person_name + " - " + movie_name + " - " + str(len(roles)))
 
-def requete5(db):
+def requete5(db : Database):
     movies_collection = db["movies"]
     ratings_collection = db["ratings"]
     knownformovies_collection = db["knownformovies"]

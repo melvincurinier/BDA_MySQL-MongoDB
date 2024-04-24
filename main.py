@@ -1,41 +1,18 @@
-import json
-import database as db
-import mongodb.requeteMongoDB as rmdb
-import mysql.requeteSQL as rsql
-import time
-import sqlite3
-import pymongo
-import mongodb.dbStructure as dbs
-import mysql.sqlite_trigger_handler as sth
+import mysql.createConnection as mysqlconnection
 
 import database as db
-
 
 if __name__ == "__main__":
    #db.createMySQLDatabase("small", True)
    #db.export_mysqlDB_to_mongoDB("imdb", "small")
    
-
-   #  # MySQL
-   # con = sqlite3.connect("./db/imdb.db")
-   # start_time = time.time()
-   # res = rsql.requete4(con)
-   # for row in res :
-   #   print(row)
-   # end_time = time.time()
-   # con.close()
-    
-   # MongoDB
-   # dbsT.insert_data_mongoDB('./db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small')
-   # client = pymongo.MongoClient("mongodb://localhost:27017/")
-   # collections = client["imdb"]
-   # start_time = time.time()
-   # dbs.afficher_tous_les_films()
-   # end_time = time.time()
-   # print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
+   #db.mysqlRequest(1)
+   
+   #db.mongodbRequest(1)
+   
 
    # start_time = time.time()
-   # rmdb.afficher_tous_les_films(collections)
+   # rmdb.afficher_tous_les_films(collections)x
    # rmdb.requete2(collections)
    # end_time = time.time()
 

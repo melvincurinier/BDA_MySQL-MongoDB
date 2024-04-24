@@ -1,6 +1,7 @@
-def requete1(con):
-    cur = con.cursor()
-    res = cur.execute('''
+import sqlite3
+
+def requete1(cursor : sqlite3.Cursor):
+    res = cursor.execute('''
                       SELECT m.primaryTitle FROM movies m 
                       JOIN characters c ON m.mid = c.mid 
                       JOIN persons p ON c.pid = p.pid 
@@ -8,9 +9,8 @@ def requete1(con):
                       ''')
     return res
 
-def requete2(con):  
-    cur = con.cursor()
-    res = cur.execute('''
+def requete2(cursor : sqlite3.Cursor):  
+    res = cursor.execute('''
                       SELECT m.primaryTitle, r.averageRating
                       FROM movies m
                       JOIN ratings r ON m.mid = r.mid 
@@ -22,9 +22,8 @@ def requete2(con):
     ''')
     return res
 
-def requete3(con):
-    cur = con.cursor()
-    res = cur.execute('''
+def requete3(cursor : sqlite3.Cursor):
+    res = cursor.execute('''
                       SELECT p.*
                         FROM persons p
                         WHERE p.pid IN (
@@ -39,9 +38,8 @@ def requete3(con):
                       ''')
     return res
 
-def requete4(con): 
-    cur = con.cursor()
-    res = cur.execute('''
+def requete4(cursor : sqlite3.Cursor): 
+    res = cursor.execute('''
                     WITH max_roles_per_person_movie AS (
                       SELECT MAX(role_count) as max_roles
                         FROM (
@@ -62,9 +60,8 @@ def requete4(con):
                     ''')
     return res
 
-def requete5(con):
-    cur = con.cursor()
-    res = cur.execute('''
+def requete5(cursor : sqlite3.Cursor):
+    res = cursor.execute('''
                       SELECT DISTINCT persons.primaryName FROM persons
                       INNER JOIN knownformovies ON persons.pid = knownformovies.pid
                       INNER JOIN movies ON knownformovies.mid = movies.mid
