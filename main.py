@@ -13,7 +13,8 @@ import database as db
 
 
 if __name__ == "__main__":
-   db.createMySQLDatabase("./db/imdb.db", "small", True)
+   #db.createMySQLDatabase("small", True)
+   #db.export_mysqlDB_to_mongoDB("imdb", "small")
    
 
    #  # MySQL

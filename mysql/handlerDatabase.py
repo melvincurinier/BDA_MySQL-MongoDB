@@ -54,7 +54,8 @@ def insertDataFromCSV(cursor : sqlite3.Cursor, dataset : str, tableName : str):
     file.close()
     print("...inserting dataset {} finished".format(tableName))
 
-def printSizeDatabase(dbname):
-    taille_octets = os.path.getsize(dbname)
+def printSizeDatabase():
+    path = "db/imdb.db"
+    taille_octets = os.path.getsize(path)
     taille_lisible = taille_octets / (1024.0 ** 2)
     print("Size of the database: ", taille_lisible, "MB")

@@ -1,56 +1,88 @@
-import sqlite3
+import mysql.createConnection as mysqlconnection
+import mysql.createTables as mysqltables
+import mysql.handlerDatabase as mysqlhandler
+import mysql.exportDatabase as mysqlexport
 
-import mysql.createTables as cT
-import mysql.handlerDatabase as hD
+import mongodb.createConnection as mongoconnection
 
-def createMySQLDatabase(dbname : str, datasetType : str, withIndexes : bool):
-    print("connecting to mysql database...\n")
+def createMySQLDatabase(datasetType : str, withIndexes : bool):
+    print("connecting to mysql database...")
     # Se connecter à la base de données
-    con = sqlite3.connect(dbname)
+    con = mysqlconnection.createConnection()
     cur = con.cursor()
 
     # Supprimer les tables
-    hD.dropTables(cur)
+    mysqlhandler.dropTables(cur)
 
     # Créer toutes les tables
-    cT.createMoviesTable(cur, withIndexes)
+    mysqltables.createMoviesTable(cur, withIndexes)
     if datasetType == "medium" or datasetType == "full":
-        cT.createEpisodesTable(cur)
-    cT.createPersonsTable(cur, withIndexes)
-    cT.createCharactersTable(cur, withIndexes)
-    cT.createDirectorsTable(cur)
-    cT.createGenresTable(cur, withIndexes)
-    cT.createKnownformoviesTable(cur, withIndexes)
-    cT.createPrincipalsTable(cur)
-    cT.createProfessionsTable(cur)
-    cT.createRatingsTable(cur)
-    cT.createTitlesTable(cur, withIndexes)
-    cT.createWritersTable(cur)
+        mysqltables.createEpisodesTable(cur)
+    mysqltables.createPersonsTable(cur, withIndexes)
+    mysqltables.createCharactersTable(cur, withIndexes)
+    mysqltables.createDirectorsTable(cur)
+    mysqltables.createGenresTable(cur, withIndexes)
+    mysqltables.createKnownformoviesTable(cur, withIndexes)
+    mysqltables.createPrincipalsTable(cur)
+    mysqltables.createProfessionsTable(cur)
+    mysqltables.createRatingsTable(cur)
+    mysqltables.createTitlesTable(cur, withIndexes)
+    mysqltables.createWritersTable(cur)
 
     # Insérer les données des fichiers CSV vers la base de données
     dataset = "./imdb-{}".format(datasetType)
-    hD.insertDataFromCSV(cur, dataset, "movies")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "movies")
     if datasetType == "medium" or datasetType == "full":
-        hD.insertDataFromCSV(cur, dataset, "episodes")
-    hD.insertDataFromCSV(cur, dataset, "persons")
-    hD.insertDataFromCSV(cur, dataset, "characters")
-    hD.insertDataFromCSV(cur, dataset, "directors")
-    hD.insertDataFromCSV(cur, dataset, "genres")
-    hD.insertDataFromCSV(cur, dataset, "knownformovies")
-    hD.insertDataFromCSV(cur, dataset, "principals")
-    hD.insertDataFromCSV(cur, dataset, "professions")
-    hD.insertDataFromCSV(cur, dataset, "ratings")
-    hD.insertDataFromCSV(cur, dataset, "titles")
-    hD.insertDataFromCSV(cur, dataset, "writers")
+        mysqlhandler.insertDataFromCSV(cur, dataset, "episodes")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "persons")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "characters")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "directors")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "genres")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "knownformovies")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "principals")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "professions")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "ratings")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "titles")
+    mysqlhandler.insertDataFromCSV(cur, dataset, "writers")
 
     # Afficher la taille de la base de données
-    hD.printSizeDatabase(dbname)
+    mysqlhandler.printSizeDatabase()
 
-    print("closing connection from mysql database...\n")
+    print("closing connection from mysql database...")
     con.commit()
     con.close()
 
-    print("creating database finished !")
-    
+    print("creating database finished !\n")
+
+def export_mysqlDB_to_mongoDB(mongodbname : str, datasetType : str):
+    print("connecting to mysql database...")
+    # Se connecter à la base de données MySQL
+    mysql_con = mysqlconnection.createConnection()
+    cur = mysql_con.cursor()
+
+    print("connecting to mongodb client...")
+    # Se connecter au client MongoDB et récupérer la base de données
+    mongo_client = mongoconnection.createConnection()
+    mongo_db = mongo_client[mongodbname]
+
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'movies')
+    if datasetType == "medium" or datasetType == "full":
+        mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'episodes')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'persons')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'characters')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'directors')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'genres')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'knownformovies')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'principals')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'professions')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'ratings')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'titles')
+    mysqlexport.export_sqliteTable_to_mongoCollection(cur, mongo_db, 'writers')
+
+    print("closing connection from mysql database...")
+    mysql_con.close()
+
+    print("closing connection from mongodb client...\n")
+    mongo_client.close()
 
 
