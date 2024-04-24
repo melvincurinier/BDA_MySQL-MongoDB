@@ -1,6 +1,4 @@
-import csv
 import sqlite3
-import os
 
 import mysql.createTables as cT
 import mysql.handlerDatabase as hD
