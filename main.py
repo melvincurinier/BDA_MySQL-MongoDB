@@ -5,7 +5,7 @@ import requeteSQL as rsql
 import time
 import sqlite3
 import pymongo
-import dbStructure as dbs
+import mongodb.dbStructure as dbs
 import mysql.sqlite_trigger_handler as sth
 
 import database as db

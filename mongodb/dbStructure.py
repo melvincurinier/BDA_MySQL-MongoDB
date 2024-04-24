@@ -1,10 +1,10 @@
 import json
 from pymongo import MongoClient
+from createConnection import createConnection
 
-def mongodbStructure():
-
+def transformStructure():
     # Connexion à la base de données MongoDB
-    client = MongoClient('localhost', 27017)
+    client = createConnection()
     db = client['imdb']
 
     # Récupérer les données de différentes collections
