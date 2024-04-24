@@ -9,10 +9,12 @@ import pymongo
 import dbStructure as dbs
 import sqlite_trigger_handler as sth
 
+import database as db
+
 
 if __name__ == "__main__":
-   #  # Création de la base de données
-   # db.createDatabase("imdb.db", "imdb-medium", True)
+   db.createMySQLDatabase("./db/imdb.db", "small", True)
+   
 
    #  # MySQL
    # con = sqlite3.connect("./db/imdb.db")
@@ -25,8 +27,8 @@ if __name__ == "__main__":
     
    # MongoDB
    # dbsT.insert_data_mongoDB('./db/imdb.db', 'mongodb://localhost:27017/', 'imdb', 'small')
-   client = pymongo.MongoClient("mongodb://localhost:27017/")
-   collections = client["imdb"]
+   # client = pymongo.MongoClient("mongodb://localhost:27017/")
+   # collections = client["imdb"]
    # start_time = time.time()
    # dbs.afficher_tous_les_films()
    # end_time = time.time()
@@ -41,16 +43,16 @@ if __name__ == "__main__":
    # print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
 
    # changer le mid
-   sth.sqlite_trigger_handler("INSERT", {
-         "mid": "t111",
-         "type": "movie",
-         "primaryTitle": "Title 111",
-         "originalTitle": "Original Title 111",
-         "isAdult": 0,
-         "startYear": "2022-01-01",
-         "endYear": "2022-01-02",
-         "runtimeMinutes": 120
-      }, "movies")
+   # sth.sqlite_trigger_handler("INSERT", {
+   #       "mid": "t111",
+   #       "type": "movie",
+   #       "primaryTitle": "Title 111",
+   #       "originalTitle": "Original Title 111",
+   #       "isAdult": 0,
+   #       "startYear": "2022-01-01",
+   #       "endYear": "2022-01-02",
+   #       "runtimeMinutes": 120
+   #    }, "movies")
 
    # Show the movie with mid = 0 from MongoDB
-   print(collections.movies.find_one({"mid": "t111"}))
+   # print(collections.movies.find_one({"mid": "t111"}))

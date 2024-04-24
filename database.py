@@ -2,128 +2,57 @@ import csv
 import sqlite3
 import os
 
-from mysql.createConnection import createMySQLConnection
 import mysql.createTables as cT
 import mysql.handlerDatabase as hD
 
-def createDatabase(dbname, dataset, isWithIndexes):
-    con = createMySQLConnection(dbname)
+def createMySQLDatabase(dbname : str, datasetType : str, withIndexes : bool):
+    print("connecting to mysql database...\n")
+    # Se connecter à la base de données
+    con = sqlite3.connect(dbname)
     cur = con.cursor()
 
-    # DROP TABLES
+    # Supprimer les tables
     hD.dropTables(cur)
-    if(dataset == "imdb-medium" or dataset == "imdb-full"):
-        hD.dropTable(cur, "episodes")
 
-    # CREATE TABLES
-    cT.createMoviesTable(cur, True)
-    if(dataset == "imdb-medium" or dataset == "imdb-full"):
+    # Créer toutes les tables
+    cT.createMoviesTable(cur, withIndexes)
+    if datasetType == "medium" or datasetType == "full":
         cT.createEpisodesTable(cur)
-    cT.createPersonsTable(cur, True)
-    cT.createCharactersTable(cur, True)
+    cT.createPersonsTable(cur, withIndexes)
+    cT.createCharactersTable(cur, withIndexes)
     cT.createDirectorsTable(cur)
-    cT.createGenresTable(cur, True)
-    cT.createKnownformoviesTable(cur, True)
+    cT.createGenresTable(cur, withIndexes)
+    cT.createKnownformoviesTable(cur, withIndexes)
     cT.createPrincipalsTable(cur)
     cT.createProfessionsTable(cur)
     cT.createRatingsTable(cur)
-    cT.createTitlesTable(cur, True)
+    cT.createTitlesTable(cur, withIndexes)
     cT.createWritersTable(cur)
 
-    # INSERT MOVIES
-    with open(dataset + "/movies.csv", "r", encoding="utf-8") as file:
-        content = csv.reader(file, delimiter=',')
-        next(content)
-        cur.executemany("INSERT INTO movies VALUES (?, ?, ?, ?, ?, ?, ?, ?)", content)
+    # Insérer les données des fichiers CSV vers la base de données
+    dataset = "./imdb-{}".format(datasetType)
+    hD.insertDataFromCSV(cur, dataset, "movies")
+    if datasetType == "medium" or datasetType == "full":
+        hD.insertDataFromCSV(cur, dataset, "episodes")
+    hD.insertDataFromCSV(cur, dataset, "persons")
+    hD.insertDataFromCSV(cur, dataset, "characters")
+    hD.insertDataFromCSV(cur, dataset, "directors")
+    hD.insertDataFromCSV(cur, dataset, "genres")
+    hD.insertDataFromCSV(cur, dataset, "knownformovies")
+    hD.insertDataFromCSV(cur, dataset, "principals")
+    hD.insertDataFromCSV(cur, dataset, "professions")
+    hD.insertDataFromCSV(cur, dataset, "ratings")
+    hD.insertDataFromCSV(cur, dataset, "titles")
+    hD.insertDataFromCSV(cur, dataset, "writers")
 
-        # INSERT EPISODES
-        with open(dataset + "/episodes.csv", "r", encoding="utf-8") as file:
-            content = csv.reader(file, delimiter=',')
-            next(content)
-            cur.executemany("INSERT INTO episodes VALUES (?, ?, ?, ?)", content)
+    # Afficher la taille de la base de données
+    hD.printSizeDatabase(dbname)
 
-    # INSERT PERSONS
-    file = open(dataset + "/persons.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO persons VALUES(?, ?, ?, ?)", content)
-    file.close()
-
-    # INSERT CHARACTERS
-    file = open(dataset + "/characters.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO characters VALUES(?, ?, ?)", content)
-    file.close()
-
-    # INSERT DIRECTORS
-    file = open(dataset + "/directors.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO directors VALUES(?, ?)", content)
-    file.close()
-
-    # INSERT GENRES
-    file = open(dataset + "/genres.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO genres VALUES(?, ?)", content)
-    file.close()
-
-    # INSERT KNOWNFORMOVIES
-    file = open(dataset + "/knownformovies.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO knownformovies VALUES(?, ?)", content)
-    file.close()
-
-    # INSERT PRINCIPALS
-    file = open(dataset + "/principals.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO principals VALUES(?, ?, ?, ?, ?)", content)
-    file.close()
-
-    # INSERT PROFESSIONS
-    file = open(dataset + "/professions.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO professions VALUES(?, ?)", content)
-    file.close()
-
-
-    # INSERT RATINGS
-    file = open(dataset + "/ratings.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO ratings VALUES(?, ?, ?)", content)
-    file.close()
-
-
-    # INSERT TITLES
-    file = open(dataset + "/titles.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO titles VALUES(?, ?, ?, ?, ?, ?, ?, ?)", content)
-    file.close()
-
-
-    # INSERT WRITERS
-    file = open(dataset + "/writers.csv", "r", encoding="utf-8")
-    content = csv.reader(file, delimiter =',')
-    next(content)
-    cur.executemany("INSERT INTO writers VALUES(?, ?)", content)
-    file.close()
-
-    # Récupérer la taille du fichier en octets
-    taille_octets = os.path.getsize("./db/" + dbname)
-
-    # Convertir la taille en format lisible par l'homme
-    taille_lisible = taille_octets / (1024.0 ** 2)  # Convertir en mégaoctets
-    print("Taille du fichier de base de données:", taille_lisible, "MB")
-
+    print("closing connection from mysql database...\n")
     con.commit()
-
     con.close()
+
+    print("creating database finished !")
+    
 
 
