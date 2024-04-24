@@ -9,15 +9,6 @@ if __name__ == "__main__":
    #db.mysqlRequest(1)
    
    #db.mongodbRequest(1)
-   
-
-   # start_time = time.time()
-   # rmdb.afficher_tous_les_films(collections)x
-   # rmdb.requete2(collections)
-   # end_time = time.time()
-
-   # client.close()
-   # print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
 
    # changer le mid
    # sth.sqlite_trigger_handler("INSERT", {
