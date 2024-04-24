@@ -1,17 +1,5 @@
-import sqlite3
-from pymongo import MongoClient
-import time
-
-# Fonction pour initialiser la connexion SQLite
-def init_sqlite_connection(sqlite_path):
-    conn = sqlite3.connect(sqlite_path)
-    return conn
-
-# Fonction pour initialiser la connexion MongoDB et les changestreams
-def init_mongodb_connection(mongodb_url):
-    client = MongoClient(mongodb_url)
-    db = client['imdb']  # Remplacer 'imdb' par le nom de ta base de données MongoDB
-    return db
+import createConnection as mongodbConnection
+import mysql.createConnection as mysqlConnection
 
 # Fonction pour surveiller les changements dans MongoDB et les synchroniser avec SQLite
 def sync_mongodb_to_sqlite(db, sqlite_conn):
@@ -66,9 +54,9 @@ def handle_delete_operation(collection_name, document, sqlite_conn):
 
 if __name__ == "__main__":
     # Initialisation des connexions à SQLite et MongoDB
-    sqlite_conn = init_sqlite_connection("./db/imdb.db")  # Remplacer le chemin par le chemin de ta base de données SQLite
-    mongodb_url = "mongodb://localhost:27017/"  # Remplacer localhost et le port par les informations de connexion à MongoDB
-    db = init_mongodb_connection(mongodb_url)
+    sqlite_conn = mysqlConnection.createConnection()
+    mongo_client = mongodbConnection.createConnection()
+    mongo_db = mongo_client["imdb"]
 
     # Synchronisation continue des données entre MongoDB et SQLite
-    sync_mongodb_to_sqlite(db, sqlite_conn)
+    sync_mongodb_to_sqlite(mongo_db, sqlite_conn)

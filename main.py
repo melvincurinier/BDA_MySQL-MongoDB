@@ -1,13 +1,12 @@
 import json
 import database as db
-import dbsTransfer as dbsT
 import requeteMongoDB as rmdb
 import requeteSQL as rsql
 import time
 import sqlite3
 import pymongo
 import dbStructure as dbs
-import sqlite_trigger_handler as sth
+import mysql.sqlite_trigger_handler as sth
 
 import database as db
 

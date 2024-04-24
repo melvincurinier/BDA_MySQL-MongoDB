@@ -1,28 +1,27 @@
 import sqlite3
 from pymongo import MongoClient
-
-import sqlite3
-from pymongo import MongoClient
+import createConnection as mysqlConnection
+import mongodb.createConnection as mongoConnection
 
 def sqlite_trigger_handler(operation, row_data, table_name):
     # Connexion à MongoDB
-    mongo_client = MongoClient("mongodb://localhost:27017/")
-    db = mongo_client["imdb"]
+    mongo_client = mongoConnection.createConnection()
+    mongo_db = mongo_client["imdb"]
 
     # Correspondance entre les tables SQLite et les collections MongoDB
     collections_mapping = {
-        "movies": db["movies"],
-        "episodes": db["episodes"],
-        "persons": db["persons"],
-        "characters": db["characters"],
-        "directors": db["directors"],
-        "genres": db["genres"],
-        "knownformovies": db["knownformovies"],
-        "principals": db["principals"],
-        "professions": db["professions"],
-        "ratings": db["ratings"],
-        "titles": db["titles"],
-        "writers": db["writers"]
+        "movies": mongo_db["movies"],
+        "episodes": mongo_db["episodes"],
+        "persons": mongo_db["persons"],
+        "characters": mongo_db["characters"],
+        "directors": mongo_db["directors"],
+        "genres": mongo_db["genres"],
+        "knownformovies": mongo_db["knownformovies"],
+        "principals": mongo_db["principals"],
+        "professions": mongo_db["professions"],
+        "ratings": mongo_db["ratings"],
+        "titles": mongo_db["titles"],
+        "writers": mongo_db["writers"]
     }
 
     # Synchronisation des données modifiées avec MongoDB
@@ -37,10 +36,8 @@ def sqlite_trigger_handler(operation, row_data, table_name):
     elif operation == "DELETE":
         collections_mapping[table_name].delete_one({"mid": row_data["mid"]})  # Supprime le document correspondant dans MongoDB
 
-
-
     # Connecter la fonction de déclencheur à SQLite
-    sqlite_conn = sqlite3.connect("./db/imdb.db")
+    sqlite_conn = mysqlConnection.createConnection()
     sqlite_conn.create_function("sqlite_trigger_handler", 3, sqlite_trigger_handler)
     sqlite_conn.execute("CREATE TRIGGER IF NOT EXISTS sync_to_mongodb AFTER INSERT ON movies BEGIN SELECT sqlite_trigger_handler('INSERT', 'movies', NEW.rowid); END;")
     sqlite_conn.execute("CREATE TRIGGER IF NOT EXISTS sync_to_mongodb AFTER UPDATE ON movies BEGIN SELECT sqlite_trigger_handler('UPDATE', 'movies', NEW.rowid); END;")
@@ -88,7 +85,6 @@ def sqlite_trigger_handler(operation, row_data, table_name):
 
     # Fermer les connexions
     sqlite_conn.close()
-
     mongo_client.close()
 
 if __name__ == "__main__":
