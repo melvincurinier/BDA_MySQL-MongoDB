@@ -1,6 +1,4 @@
-import json
-from pymongo import MongoClient
-from createConnection import createConnection
+from mongodb.createConnection import createConnection
 
 def transformStructure():
     # Connexion à la base de données MongoDB
@@ -23,6 +21,7 @@ def transformStructure():
 
     # Créer une nouvelle collection pour les films avec chaque film représenté par un objet JSON
     film_collection = db['film_collection']
+    films = []
 
     # Parcourir les documents de la collection de films
     for movie_data in movies_collection.find():
@@ -59,6 +58,11 @@ def transformStructure():
 
         # Insérer le nouvel objet JSON dans la nouvelle collection
         film_collection.insert_one(film_info)
+        films.append(film_info)
         print("Film ajouté à la collection 'film_collection' :", movie_data['primaryTitle'])
 
-    print("Nouvelle collection 'film_collection' créée avec succès.")
+    print("Nouvelle collection 'film_collection' créée avec succès.\n")
+
+    return films
+
+    

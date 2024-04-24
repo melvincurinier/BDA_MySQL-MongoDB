@@ -28,6 +28,7 @@
     db.createCollection("ratings")
     db.createCollection("titles")
     db.createCollection("writers")
+    db.createCollection("film_collection")
     
     show collections
 

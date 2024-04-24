@@ -1,5 +1,5 @@
-import createConnection as mongodbConnection
-import mysql.createConnection as mysqlConnection
+import createConnection as mongodbconnection
+import mysql.createConnection as mysqlconnection
 
 # Fonction pour surveiller les changements dans MongoDB et les synchroniser avec SQLite
 def sync_mongodb_to_sqlite(db, sqlite_conn):
@@ -54,8 +54,8 @@ def handle_delete_operation(collection_name, document, sqlite_conn):
 
 if __name__ == "__main__":
     # Initialisation des connexions à SQLite et MongoDB
-    sqlite_conn = mysqlConnection.createConnection()
-    mongo_client = mongodbConnection.createConnection()
+    sqlite_conn = mysqlconnection.createConnection()
+    mongo_client = mongodbconnection.createConnection()
     mongo_db = mongo_client["imdb"]
 
     # Synchronisation continue des données entre MongoDB et SQLite

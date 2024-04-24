@@ -6,8 +6,10 @@ import mysql.requeteSQL as mysqlrequest
 
 import mongodb.createConnection as mongoconnection
 import mongodb.requeteMongoDB as mongodbrequest
+import mongodb.dbStructure as mongodbStructure
 
 import time
+import json
 
 def createMySQLDatabase(datasetType : str, withIndexes : bool):
     print("connecting to mysql database...")
@@ -132,3 +134,11 @@ def mongodbRequest(number):
             print("Wrong request number {}".format(number))
    end_time = time.time()
    print("Temps pour récupérer les informations :", end_time - start_time, "secondes")
+
+def mongoDBmoviesStructure():
+    films = mongodbStructure.transformStructure()
+    # Écrire les données dans un fichier JSON
+    with open('films_data.json', 'w') as json_file:
+        # Exclure l'identifiant _id lors de la sérialisation JSON
+        json.dump(films, json_file, indent=4, default=str)
+        print("Données écrites dans un fichier JSON.")

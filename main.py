@@ -1,14 +1,14 @@
-import mysql.createConnection as mysqlconnection
-
 import database as db
 
 if __name__ == "__main__":
-   #db.createMySQLDatabase("small", True)
-   #db.export_mysqlDB_to_mongoDB("imdb", "small")
+   db.createMySQLDatabase("tiny", True)
+   db.export_mysqlDB_to_mongoDB("imdb", "tiny")
    
    #db.mysqlRequest(1)
    
    #db.mongodbRequest(1)
+
+   #db.mongoDBmoviesStructure()
 
    # changer le mid
    # sth.sqlite_trigger_handler("INSERT", {

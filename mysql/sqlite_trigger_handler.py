@@ -1,11 +1,11 @@
 import sqlite3
 from pymongo import MongoClient
-import createConnection as mysqlConnection
-import mongodb.createConnection as mongoConnection
+import createConnection as mysqlconnection
+import mongodb.createConnection as mongoconnection
 
 def sqlite_trigger_handler(operation, row_data, table_name):
     # Connexion à MongoDB
-    mongo_client = mongoConnection.createConnection()
+    mongo_client = mongoconnection.createConnection()
     mongo_db = mongo_client["imdb"]
 
     # Correspondance entre les tables SQLite et les collections MongoDB
@@ -37,7 +37,7 @@ def sqlite_trigger_handler(operation, row_data, table_name):
         collections_mapping[table_name].delete_one({"mid": row_data["mid"]})  # Supprime le document correspondant dans MongoDB
 
     # Connecter la fonction de déclencheur à SQLite
-    sqlite_conn = mysqlConnection.createConnection()
+    sqlite_conn = mysqlconnection.createConnection()
     sqlite_conn.create_function("sqlite_trigger_handler", 3, sqlite_trigger_handler)
     sqlite_conn.execute("CREATE TRIGGER IF NOT EXISTS sync_to_mongodb AFTER INSERT ON movies BEGIN SELECT sqlite_trigger_handler('INSERT', 'movies', NEW.rowid); END;")
     sqlite_conn.execute("CREATE TRIGGER IF NOT EXISTS sync_to_mongodb AFTER UPDATE ON movies BEGIN SELECT sqlite_trigger_handler('UPDATE', 'movies', NEW.rowid); END;")
