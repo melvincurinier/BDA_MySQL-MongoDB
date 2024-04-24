@@ -1,7 +1,7 @@
 import json
 import database as db
-import requeteMongoDB as rmdb
-import requeteSQL as rsql
+import mongodb.requeteMongoDB as rmdb
+import mysql.requeteSQL as rsql
 import time
 import sqlite3
 import pymongo
