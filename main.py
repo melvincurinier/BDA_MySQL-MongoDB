@@ -1,6 +1,4 @@
 import database as db
-import mongodb.mongodb_trigger_handler
-import mysql.sqlite_trigger_handler
 
 if __name__ == "__main__":
    db.createMySQLDatabase("tiny", True)

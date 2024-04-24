@@ -1,6 +1,5 @@
-import sqlite3
 from pymongo import MongoClient
-import createConnection as mysqlconnection
+import mysql.createConnection as mysqlconnection
 import mongodb.createConnection as mongoconnection
 
 def sqlite_trigger_handler(operation, row_data, table_name):
