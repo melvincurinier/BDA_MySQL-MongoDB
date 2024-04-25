@@ -1,8 +1,11 @@
 import createConnection as mongodbconnection
 import mysql.createConnection as mysqlconnection
 
+from pymongo.database import Database
+from sqlite3 import Connection
+
 # Fonction pour surveiller les changements dans MongoDB et les synchroniser avec SQLite
-def sync_mongodb_to_sqlite(db, sqlite_conn):
+def sync_mongodb_to_sqlite(db : Database, sqlite_conn : Connection):
     # Démarre les changestreams pour surveiller les collections MongoDB
     with db.watch() as stream:
         for change in stream:
@@ -22,7 +25,7 @@ def sync_mongodb_to_sqlite(db, sqlite_conn):
                 handle_delete_operation(collection_name, document, sqlite_conn)
 
 # Fonction pour gérer les opérations d'insertion
-def handle_insert_operation(collection_name, document, sqlite_conn):
+def handle_insert_operation(collection_name : str, document, sqlite_conn : Connection):
     if collection_name == 'movies':
         cursor = sqlite_conn.cursor()
         cursor.execute("INSERT INTO movies VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -33,7 +36,7 @@ def handle_insert_operation(collection_name, document, sqlite_conn):
         cursor.close()
 
 # Fonction pour gérer les opérations de mise à jour
-def handle_update_operation(collection_name, document, sqlite_conn):
+def handle_update_operation(collection_name : str, document, sqlite_conn : Connection):
     if collection_name == 'movies':
         cursor = sqlite_conn.cursor()
         cursor.execute("UPDATE movies SET titleType=?, primaryTitle=?, originalTitle=?, isAdult=?, startYear=?, endYear=?, runtimeMinutes=? WHERE mid=?",
@@ -43,8 +46,7 @@ def handle_update_operation(collection_name, document, sqlite_conn):
         print("Film mis à jour:", document['primaryTitle'])
         cursor.close()
 
-# Fonction pour gérer les opérations de suppression
-def handle_delete_operation(collection_name, document, sqlite_conn):
+def handle_delete_operation(collection_name : str, document, sqlite_conn : Connection):
     if collection_name == 'movies':
         cursor = sqlite_conn.cursor()
         cursor.execute("DELETE FROM movies WHERE mid=?", (document['mid'],))
