@@ -1,5 +1,4 @@
 import database as db
-import mysql as sth
 if __name__ == "__main__":
 
    db.createMySQLDatabase("tiny", True)
@@ -11,17 +10,17 @@ if __name__ == "__main__":
 
    db.mongoDBmoviesStructure()
 
-   # changer le mid
-   sth.sqlite_trigger_handler("INSERT", {
-         "mid": "t111",
-         "type": "movie",
-         "primaryTitle": "Title 111",
-         "originalTitle": "Original Title 111",
-         "isAdult": 0,
-         "startYear": "2022-01-01",
-         "endYear": "2022-01-02",
-         "runtimeMinutes": 120
-      }, "movies")
+   # # changer le mid
+   # sth.sqlite_trigger_handler("INSERT", {
+   #       "mid": "t111",
+   #       "type": "movie",
+   #       "primaryTitle": "Title 111",
+   #       "originalTitle": "Original Title 111",
+   #       "isAdult": 0,
+   #       "startYear": "2022-01-01",
+   #       "endYear": "2022-01-02",
+   #       "runtimeMinutes": 120
+   #    }, "movies")
 
-   # Show the movie with mid = 0 from MongoDB
-   print(collections.movies.find_one({"mid": "t111"}))
+   # # Show the movie with mid = 0 from MongoDB
+   # print(collections.movies.find_one({"mid": "t111"}))
