@@ -3,6 +3,11 @@ import mysql.createConnection as mysqlconnection
 import mongodb.createConnection as mongoconnection
 
 def sqlite_trigger_handler(operation : str, row_data : dict, table_name : str):
+    # je veux faire cette operation sur la base de donnée sqlite aussi
+
+    # Connexion à SQLite
+    sqlite_conn = mysqlconnection.createConnection()
+    sqlite_cursor = sqlite_conn.cursor()
     # Connexion à MongoDB
     mongo_client = mongoconnection.createConnection()
     mongo_db = mongo_client["imdb"]
@@ -25,15 +30,28 @@ def sqlite_trigger_handler(operation : str, row_data : dict, table_name : str):
 
     # Synchronisation des données modifiées avec MongoDB
     if operation == "INSERT":
+        # Créer une nouvelle ligne dans la table SQLite
+        columns = ", ".join(row_data.keys())
+        values = ", ".join([f"'{value}'" for value in row_data.values()])
+        sqlite_cursor.execute(f"INSERT INTO {table_name} ({columns}) VALUES ({values})")
+        sqlite_conn.commit()
         collections_mapping[table_name].insert_one(row_data)
     elif operation == "UPDATE":
+        # Mettre à jour la ligne correspondante dans la table SQLite
+        update_data = ", ".join([f"{key} = '{value}'" for key, value in row_data.items()])
+        sqlite_cursor.execute(f"UPDATE {table_name} SET {update_data} WHERE mid = '{row_data['mid']}'")
+        sqlite_conn.commit()
         # Mise à jour du document correspondant dans MongoDB
         # Remplacez les valeurs des champs modifiés par les nouvelles valeurs
         filter_query = {"mid": row_data["mid"]}  # Utilisez une clé primaire ou un identifiant unique pour la mise à jour
         update_data = {key: value for key, value in row_data.items() if key != "mid"}  # Excluez la clé primaire de la mise à jour
         collections_mapping[table_name].update_one(filter_query, {"$set": update_data})
     elif operation == "DELETE":
+        # Supprimer la ligne correspondante dans la table SQLite
+        sqlite_cursor.execute(f"DELETE FROM {table_name} WHERE mid = '{row_data['mid']}'")
+        sqlite_conn.commit()
         collections_mapping[table_name].delete_one({"mid": row_data["mid"]})  # Supprime le document correspondant dans MongoDB
+        
 
     # Connecter la fonction de déclencheur à SQLite
     sqlite_conn = mysqlconnection.createConnection()
