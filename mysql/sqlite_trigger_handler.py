@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import mysql.createConnection as mysqlconnection
 import mongodb.createConnection as mongoconnection
 
-def sqlite_trigger_handler(operation, row_data, table_name):
+def sqlite_trigger_handler(operation : str, row_data : dict, table_name : str):
     # Connexion à MongoDB
     mongo_client = mongoconnection.createConnection()
     mongo_db = mongo_client["imdb"]
