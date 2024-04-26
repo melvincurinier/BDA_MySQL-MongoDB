@@ -3,6 +3,7 @@ import mysql.createTables as mysqltables
 import mysql.handlerDatabase as mysqlhandler
 import mysql.exportDatabase as mysqlexport
 import mysql.requeteSQL as mysqlrequest
+import mysql.sqlite_trigger_handler as mysqltrigger
 
 import mongodb.createConnection as mongoconnection
 import mongodb.requeteMongoDB as mongodbrequest
@@ -10,6 +11,9 @@ import mongodb.dbStructure as mongodbStructure
 
 import time
 import json
+
+from ctypes import *
+from ctypes.util import find_library
 
 def createMySQLDatabase(datasetType : str, withIndexes : bool):
     print("connecting to mysql database...")
@@ -142,3 +146,81 @@ def mongoDBmoviesStructure():
         # Exclure l'identifiant _id lors de la sérialisation JSON
         json.dump(films, json_file, indent=4, default=str)
         print("Données écrites dans un fichier JSON.")
+
+# Define some symbols
+SQLITE_DELETE =  9
+SQLITE_INSERT = 18
+SQLITE_UPDATE = 23
+data = []
+
+# Define our callback function
+#
+# 'user_data' will be the third param passed to sqlite3_update_hook
+# 'operation' will be one of: SQLITE_DELETE, SQLITE_INSERT, or SQLITE_UPDATE
+# 'db name' will be the name of the affected database
+# 'table_name' will be the name of the affected table
+# 'row_id' will be the ID of the affected row
+def callback(user_data, operation, db_name, table_name, row_id):
+    mongo_client = mongoconnection.createConnection()
+    mongo_db = mongo_client['imdb']
+
+    sqlite_conn = mysqlconnection.createConnection()
+    sqlite_cursor = sqlite_conn.cursor()
+
+    if operation == SQLITE_DELETE:
+        optext = 'Deleted row'
+        synchronisemongodb(sqlite_cursor, mongo_db, table_name, row_id)
+    elif operation == SQLITE_INSERT:
+        optext = 'Inserted row'
+        synchronisemongodb(sqlite_cursor, mongo_db, table_name, row_id)
+    elif operation == SQLITE_UPDATE:
+        optext = 'Updated row'
+        synchronisemongodb(sqlite_cursor, mongo_db, table_name, row_id)
+    else:
+        optext = 'Unknown operation on row'
+    s = '%s %ld of table "%s" in database "%s"' % (optext, row_id, table_name, db_name)
+    print(s)
+
+    mongo_client.close()
+    sqlite_conn.close()
+
+def synchronisemongodb(sqlite_cursor, mongo_db, table, row_id):
+    sqlite_cursor.execute(f"SELECT * FROM {table} WHERE rowid = {row_id};")
+    last_row = sqlite_cursor.fetchone()
+
+    # Convertir la ligne SQLite en un dictionnaire
+    column_names = [description[0] for description in sqlite_cursor.description]
+    last_row_dict = dict(zip(column_names, last_row))
+
+    # Ajouter à la base de données MongoDB la ligne last_row_dict
+    mongo_collection = mongo_db[table]
+    mongo_collection.insert_one(last_row_dict)
+
+def mysql_trigger_tomongodb():
+    # Translate into a ctypes callback
+    c_callback = CFUNCTYPE(c_void_p, c_void_p, c_int, c_char_p, c_char_p, c_int64)(callback)
+
+    # Load sqlite3
+    dll = cdll.LoadLibrary(find_library('sqlite3'))
+
+    # Holds a pointer to the database connection
+    db = c_void_p()
+
+    # Open a connection to 'imdb.db'
+    dll.sqlite3_open('./db/imdb.db', byref(db))
+
+    # Register callback
+    dll.sqlite3_update_hook(db, c_callback, None)
+
+    # Create a variable to hold error messages
+    err = c_char_p()
+
+    # Now execute some SQL
+    # Exemple
+    request = b'INSERT INTO movies VALUES ("tt111","movie","BDD","Base de donnees",0,1911,1913,71);'
+    dll.sqlite3_exec(db, request, None, None, byref(err))
+    if err:
+        print(err.value)
+    dll.sqlite3_close(db)
+
+    

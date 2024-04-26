@@ -1,15 +1,17 @@
 import database as db
+
 if __name__ == "__main__":
 
-   db.createMySQLDatabase("tiny", True)
-   db.export_mysqlDB_to_mongoDB("imdb", "tiny")
+   #db.createMySQLDatabase("tiny", True)
+   #db.export_mysqlDB_to_mongoDB("imdb", "tiny")
    
-   db.mysqlRequest(1)
+   #db.mysqlRequest(1)
    
-   db.mongodbRequest(1)
+   #db.mongodbRequest(1)
 
-   db.mongoDBmoviesStructure()
+   #db.mongoDBmoviesStructure()
 
+   # version 1
    # # changer le mid
    # sth.sqlite_trigger_handler("INSERT", {
    #       "mid": "t111",
@@ -24,3 +26,6 @@ if __name__ == "__main__":
 
    # # Show the movie with mid = 0 from MongoDB
    # print(collections.movies.find_one({"mid": "t111"}))
+
+   # version 2
+   db.mysql_trigger_tomongodb()
