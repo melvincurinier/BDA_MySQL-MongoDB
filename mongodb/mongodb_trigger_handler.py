@@ -1,6 +1,3 @@
-import createConnection as mongodbconnection
-import mysql.createConnection as mysqlconnection
-
 from pymongo.database import Database
 from sqlite3 import Connection
 
@@ -53,12 +50,3 @@ def handle_delete_operation(collection_name : str, document, sqlite_conn : Conne
         sqlite_conn.commit()
         print("Film supprimé:", document['primaryTitle'])
         cursor.close()
-
-if __name__ == "__main__":
-    # Initialisation des connexions à SQLite et MongoDB
-    sqlite_conn = mysqlconnection.createConnection()
-    mongo_client = mongodbconnection.createConnection()
-    mongo_db = mongo_client["imdb"]
-
-    # Synchronisation continue des données entre MongoDB et SQLite
-    sync_mongodb_to_sqlite(mongo_db, sqlite_conn)

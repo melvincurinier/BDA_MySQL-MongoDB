@@ -2,8 +2,8 @@ import database as db
 
 if __name__ == "__main__":
 
-   #db.createMySQLDatabase("tiny", True)
-   #db.export_mysqlDB_to_mongoDB("imdb", "tiny")
+   db.createMySQLDatabase("tiny", False)
+   db.export_mysqlDB_to_mongoDB("imdb", "tiny")
    
    #db.mysqlRequest(1)
    
@@ -28,4 +28,6 @@ if __name__ == "__main__":
    # print(collections.movies.find_one({"mid": "t111"}))
 
    # version 2
-   db.mysql_trigger_tomongodb()
+   #db.mysql_trigger_tomongodb()
+
+   #db.mongo_trigger_tomysql()

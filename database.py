@@ -3,11 +3,11 @@ import mysql.createTables as mysqltables
 import mysql.handlerDatabase as mysqlhandler
 import mysql.exportDatabase as mysqlexport
 import mysql.requeteSQL as mysqlrequest
-import mysql.sqlite_trigger_handler as mysqltrigger
 
 import mongodb.createConnection as mongoconnection
 import mongodb.requeteMongoDB as mongodbrequest
 import mongodb.dbStructure as mongodbStructure
+import mongodb.mongodb_trigger_handler as mongotrigger
 
 import time
 import json
@@ -224,3 +224,9 @@ def mysql_trigger_tomongodb():
     dll.sqlite3_close(db)
 
     
+def mongo_trigger_tomysql():
+    sqlite_conn = mysqlconnection.createConnection()
+    mongo_client = mongoconnection.createConnection()
+    mongo_db = mongo_client["imdb"]
+
+    mongotrigger.sync_mongodb_to_sqlite(mongo_db, sqlite_conn)
